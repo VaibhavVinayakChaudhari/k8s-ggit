@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.31.1 (46dcb9181)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php
+  name: php
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: php
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.31.1 (46dcb9181)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/docker-tutorial-default: "true"
+        io.kompose.service: php
+    spec:
+      containers:
+        - image: php
+          name: php
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/www/php
+              name: php-claim0
+          workingDir: /var/www/php
+      restartPolicy: Always
+      volumes:
+        - name: php-claim0
+          persistentVolumeClaim:
+            claimName: php-claim0
+status: {}
